@@ -1,122 +1,67 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import editIcon from "./assets/lapis.svg"
+import trashIcon from "./assets/lixeira.svg"
 import './App.css'
+import { useState } from "react"
 
 function App() {
-  const [count, setCount] = useState(0)
+  //states e variedades
+  //funções e effects
+
+const [tasklist, setTasklist] = useState([
+  {id: 1, descricao: "Revisar HTML Semântico"},
+  {id: 2, descricao: "Revisar ReactJS"},
+  {id: 3, descricao: "Revisar ReactJS"},
+  {id: 4, descricao: "Revisar React Native"},
+]);
+
+
+
+
+
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      <header className='header-section'>
+        <h1 className='header-section__title'>React List</h1>
+      </header>
 
-      <div className="ticks"></div>
+      <main className='body-section'>
+        <form className='cad-task'>
+          <input type="text" className="cad-task__entry" placeholder='Adicionar uma tarefa' />
+          <button className="cad-task__btn-confirm">adicionar</button>
+        </form>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        <section className='cardlist'>
+          {
+            tasklist.map((task) => {
+              return 
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+              
+            })
+          }
+
+
+
+          <article className='cardtask'>
+            <p className="cardtask__task-text">Estudar propriedades em React</p>
+          <div className="cardtask__icon-box">  
+          <div className="cardlist__icon">
+            <img src={editIcon} alt="Imagem de uma caneta - ação editar tarefa" />
+            </div>  
+           <div className="cardlist__icon">
+            <img src={trashIcon} alt="Imagem de uma lixeira - ação excluir tarefa" />
+            </div> 
+          </div>
+          </article>
+        </section>
+      </main>
+
+      <footer className='footer-section'>
+        <p className='footer-section__right-text'>2026 React List - Todos os direitos</p>
+      </footer>
     </>
   )
 }
+
 
 export default App
