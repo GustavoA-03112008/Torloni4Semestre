@@ -7,27 +7,89 @@ import "./App.css";
 
 function App() {
   const [tasklist, setTasklist] = useState([]);
+  const [taskValue, setTaskValue] = useState("");
+  const [editMode, setEditMode] = useState(false);
+  const [idToEdit, setIdToEdit] = useState(0);
 
   // Buscar tarefas
   const getTasks = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/taskpoin")
-      const dataAPI = response.data
-
-      setTasklist(dataAPI)
+      const response = await axios.get("http://localhost:3000/taskpoin");
+      setTasklist(response.data);
     } catch (error) {
       console.error("Erro ao buscar tarefas:", error);
     }
   };
 
   // Criar tarefa
-  const createTasks = () => {};
+  const createTasks = async (e) => {
+    e.preventDefault();
 
-  // Atualizar tarefa
-  const putTask = () => {};
+    if (taskValue.trim() === "") {
+      alert("Digite uma tarefa!");
+      return;
+    }
+
+    try {
+      await axios.post("http://localhost:3000/taskpoin", {
+        descricao: taskValue,
+      });
+
+      setTaskValue("");
+      getTasks();
+    } catch (error) {
+      console.error("Erro ao cadastrar tarefa:", error);
+    }
+  };
+
+  // Entrar em modo de edição
+  const putTask = (task) => {
+    setTaskValue(task.descricao);
+    setEditMode(true);
+    setIdToEdit(task.id);
+  };
+
+  // Confirmar edição
+  const confirmPutTask = async (e) => {
+    e.preventDefault();
+
+    if (taskValue.trim() === "") {
+      alert("Digite uma tarefa!");
+      return;
+    }
+
+    try {
+      await axios.put(`http://localhost:3000/taskpoin/${idToEdit}`, {
+        descricao: taskValue,
+      });
+
+      alert("Tarefa editada com sucesso!");
+
+      setEditMode(false);
+      setIdToEdit(0);
+      setTaskValue("");
+
+      getTasks();
+    } catch (error) {
+      console.error("Erro ao editar tarefa:", error);
+    }
+  };
 
   // Excluir tarefa
-  const deleteTask = () => {};
+  const deleteTask = async (task) => {
+    const confirmar = confirm(
+      `Deseja excluir a tarefa "${task.descricao}"?`
+    );
+
+    if (!confirmar) return;
+
+    try {
+      await axios.delete(`http://localhost:3000/taskpoin/${task.id}`);
+      getTasks();
+    } catch (error) {
+      console.error("Erro ao excluir tarefa:", error);
+    }
+  };
 
   useEffect(() => {
     getTasks();
@@ -40,19 +102,38 @@ function App() {
       </header>
 
       <main className="body-section">
-        <form className="cad-task">
+        <form
+          className="cad-task"
+          onSubmit={editMode ? confirmPutTask : createTasks}
+        >
           <input
             type="text"
             className="cad-task__entry"
             placeholder="Adicione uma tarefa"
+            value={taskValue}
+            onChange={(e) => setTaskValue(e.target.value)}
           />
 
           <button
             type="submit"
             className="cad-task__btn-confirm"
           >
-            Adicionar
+            {editMode ? "Adicionar" : "Adicionar"}
           </button>
+
+          {editMode && (
+            <button
+              type="button"
+              className="cad-task__btn-confirm"
+              onClick={() => {
+                setEditMode(false);
+                setIdToEdit(0);
+                setTaskValue("");
+              }}
+            >
+              Cancelar
+            </button>
+          )}
         </form>
 
         <section className="cardlist">
@@ -67,6 +148,8 @@ function App() {
                   <img
                     src={editIcon}
                     alt="Editar tarefa"
+                    onClick={() => putTask(task)}
+                    style={{ cursor: "pointer" }}
                   />
                 </div>
 
@@ -74,6 +157,8 @@ function App() {
                   <img
                     src={trashIcon}
                     alt="Excluir tarefa"
+                    onClick={() => deleteTask(task)}
+                    style={{ cursor: "pointer" }}
                   />
                 </div>
               </div>
